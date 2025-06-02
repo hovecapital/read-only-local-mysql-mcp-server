@@ -27,23 +27,7 @@ mkdir ~/mcp-servers/mysql
 cd ~/mcp-servers/mysql
 ```
 
-### 2. Create Package Configuration
-
-Create a `package.json` file in the same directory:
-
-```json
-{
-  "name": "mysql-mcp-server",
-  "version": "1.0.0",
-  "type": "commonjs",
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.4.0",
-    "mysql2": "^3.6.0"
-  }
-}
-```
-
-### 3. Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 npm install
@@ -57,13 +41,13 @@ Open your Claude Desktop configuration file:
 
 **macOS:**
 
-```
+```bash
 ~/Library/Application Support/Claude/claude_desktop_config.json
 ```
 
 **Windows:**
 
-```
+```bash
 %APPDATA%\Claude\claude_desktop_config.json
 ```
 
@@ -104,7 +88,7 @@ Add the MySQL server configuration:
 
 ### Example Queries
 
-```
+```bash
 "Show me all tables in my database"
 "What's the structure of the users table?"
 "Get the first 10 records from the products table"
@@ -149,7 +133,6 @@ FLUSH PRIVILEGES;
 1. **Verify MySQL is running**: Check if your MySQL server is active
 2. **Check credentials**: Ensure username/password are correct
 3. **Network connectivity**: Confirm Claude Desktop can reach your MySQL server
-4. **Firewall settings**: Make sure port 3306 (or your custom port) is accessible
 
 ### Configuration Issues
 
@@ -162,14 +145,14 @@ FLUSH PRIVILEGES;
 To see server logs, you can run the server manually:
 
 ```bash
-node mysql-mcp-server.js
+node index.js
 ```
 
 ## File Structure
 
 ```bash
 ~/mcp-servers/mysql/
-├── mysql-mcp-server.js
+├── index.js
 ├── package.json
 └── node_modules/
 ```
