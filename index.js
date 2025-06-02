@@ -15,7 +15,7 @@ const mysql = require("mysql2/promise");
 // Database configuration from environment variables
 const DB_HOST = process.env.DB_HOST || "mysql";
 const DB_PORT = process.env.DB_PORT || "3306";
-const DB_DATABASE = process.env.DB_DATABASE || "laravel";
+const DB_DATABASE = process.env.DB_DATABASE || "database";
 const DB_USERNAME = process.env.DB_USERNAME || "root";
 const DB_PASSWORD = process.env.DB_PASSWORD || "";
 
