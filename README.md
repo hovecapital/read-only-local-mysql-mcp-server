@@ -69,7 +69,7 @@ If you're using Claude Code, add the MySQL server to your MCP settings:
     "servers": {
       "mysql": {
         "command": "node",
-        "args": ["/absolute/path/to/read-only-local-mysql-mcp-server/dist/ index.js"],
+        "args": ["/absolute/path/to/read-only-local-mysql-mcp-server/dist/index.js"],
         "env": {
           "DB_HOST": "localhost",
           "DB_PORT": "3306",
