@@ -1,25 +1,37 @@
 #!/usr/bin/env node
 
-const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
-const {
-  StdioServerTransport,
-} = require("@modelcontextprotocol/sdk/server/stdio.js");
-const {
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
   CallToolRequestSchema,
   ErrorCode,
   ListToolsRequestSchema,
   McpError,
-} = require("@modelcontextprotocol/sdk/types.js");
-const mysql = require("mysql2/promise");
+} from "@modelcontextprotocol/sdk/types.js";
+import mysql from "mysql2/promise";
+import type { Connection } from "mysql2/promise";
 
-// Database configuration from environment variables
-const DB_HOST = process.env.DB_HOST || "mysql";
-const DB_PORT = process.env.DB_PORT || "3306";
-const DB_DATABASE = process.env.DB_DATABASE || "database";
-const DB_USERNAME = process.env.DB_USERNAME || "root";
-const DB_PASSWORD = process.env.DB_PASSWORD || "";
+const DB_HOST: string = process.env.DB_HOST ?? "mysql";
+const DB_PORT: string = process.env.DB_PORT ?? "3306";
+const DB_DATABASE: string = process.env.DB_DATABASE ?? "database";
+const DB_USERNAME: string = process.env.DB_USERNAME ?? "root";
+const DB_PASSWORD: string = process.env.DB_PASSWORD ?? "";
+
+type QueryToolArguments = {
+  sql: string;
+};
+
+type DatabaseConfig = {
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  database: string;
+};
 
 class MySQLServer {
+  private server: Server;
+
   constructor() {
     this.server = new Server(
       {
@@ -35,33 +47,33 @@ class MySQLServer {
 
     this.setupToolHandlers();
 
-    // Error handling
-    this.server.onerror = (error) => console.error("[MCP Error]", error);
+    this.server.onerror = (error): void => console.error("[MCP Error]", error);
     process.on("SIGINT", async () => {
       await this.server.close();
       process.exit(0);
     });
   }
 
-  async createConnection() {
+  private async createConnection(): Promise<Connection> {
     try {
-      return await mysql.createConnection({
+      const config: DatabaseConfig = {
         host: DB_HOST,
         port: parseInt(DB_PORT, 10),
         user: DB_USERNAME,
         password: DB_PASSWORD,
         database: DB_DATABASE,
-      });
+      };
+      return await mysql.createConnection(config);
     } catch (error) {
       console.error("Failed to create MySQL connection:", error);
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to connect to MySQL: ${error.message}`
+        `Failed to connect to MySQL: ${(error as Error).message}`
       );
     }
   }
 
-  setupToolHandlers() {
+  private setupToolHandlers(): void {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
       tools: [
         {
@@ -89,18 +101,9 @@ class MySQLServer {
         );
       }
 
-      const { sql } = request.params.arguments;
+      const { sql } = request.params.arguments as QueryToolArguments;
 
-      // Basic validation to ensure this is a read-only query
-      const normalizedSql = sql.trim().toLowerCase();
-      if (
-        normalizedSql.startsWith("insert") ||
-        normalizedSql.startsWith("update") ||
-        normalizedSql.startsWith("delete") ||
-        normalizedSql.startsWith("drop") ||
-        normalizedSql.startsWith("alter") ||
-        normalizedSql.startsWith("create")
-      ) {
+      if (!this.isReadOnlyQuery(sql)) {
         return {
           content: [
             {
@@ -112,7 +115,7 @@ class MySQLServer {
         };
       }
 
-      let connection;
+      let connection: Connection | undefined;
       try {
         connection = await this.createConnection();
         const [rows] = await connection.execute(sql);
@@ -130,7 +133,7 @@ class MySQLServer {
           content: [
             {
               type: "text",
-              text: `MySQL Error: ${error.message}`,
+              text: `MySQL Error: ${(error as Error).message}`,
             },
           ],
           isError: true,
@@ -143,7 +146,21 @@ class MySQLServer {
     });
   }
 
-  async run() {
+  private isReadOnlyQuery(sql: string): boolean {
+    const normalizedSql = sql.trim().toLowerCase();
+    const writeOperations = [
+      "insert",
+      "update",
+      "delete",
+      "drop",
+      "alter",
+      "create",
+    ] as const;
+
+    return !writeOperations.some((op) => normalizedSql.startsWith(op));
+  }
+
+  async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     console.error("MySQL MCP server running on stdio");
