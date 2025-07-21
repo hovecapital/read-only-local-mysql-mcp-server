@@ -12,28 +12,78 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v14 or higher) - If using mise, update the command path accordingly
 - MySQL database server
 - Claude Desktop application
 
 ## Installation
 
-### 1. Clone or Download
+### Option 1: Installation with Claude Code
 
-Save the `index.js` file to a directory on your system:
+If you're using Claude Code, you can easily install this MCP server:
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/read-only-local-mysql-mcp-server.git
+cd read-only-local-mysql-mcp-server
+
+# Install dependencies and build
+npm run build
+```
+
+Then configure Claude Code by adding to your MCP settings.
+
+### Option 2: Manual Installation
+
+#### 1. Clone or Download
+
+Save the repository to a directory on your system:
 
 ```bash
 mkdir ~/mcp-servers/mysql
 cd ~/mcp-servers/mysql
+git clone https://github.com/your-username/read-only-local-mysql-mcp-server.git .
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 
 ```bash
 npm install
+# Or for production deployment:
+npm run build
 ```
 
 ## Configuration
+
+### Claude Code Configuration
+
+If you're using Claude Code, add the MySQL server to your MCP settings:
+
+1. Open your Claude Code settings (typically in `~/.config/claude-code/settings.json` on macOS/Linux or `%APPDATA%\claude-code\settings.json` on Windows)
+
+2. Add the MySQL MCP server configuration:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "mysql": {
+        "command": "node",
+        "args": ["/absolute/path/to/read-only-local-mysql-mcp-server/index.js"],
+        "env": {
+          "DB_HOST": "localhost",
+          "DB_PORT": "3306",
+          "DB_DATABASE": "your_database_name",
+          "DB_USERNAME": "your_username",
+          "DB_PASSWORD": "your_password"
+        }
+      }
+    }
+  }
+}
+```
+
+3. Restart Claude Code for the changes to take effect.
 
 ### Claude Desktop Configuration
 
@@ -70,6 +120,13 @@ Add the MySQL server configuration:
   }
 }
 ```
+
+### Using mise for Node.js
+
+If you're using [mise](https://mise.jdx.dev/) for Node.js version management, make sure to use the full path to the Node.js executable in your configuration. For example:
+
+- Replace `"command": "node"` with `"command": "/Users/YOUR_USERNAME/.local/share/mise/installs/node/VERSION/bin/node"`
+- You can find your mise Node.js path by running: `which node` when mise is active
 
 ### Environment Variables
 

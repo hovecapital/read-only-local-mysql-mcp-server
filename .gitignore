@@ -107,3 +107,4 @@ mcp-server.log
 # Local development scripts
 start-local.sh
 start-dev
+.claude
