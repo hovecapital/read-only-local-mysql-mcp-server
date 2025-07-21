@@ -69,7 +69,7 @@ If you're using Claude Code, add the MySQL server to your MCP settings:
     "servers": {
       "mysql": {
         "command": "node",
-        "args": ["/absolute/path/to/read-only-local-mysql-mcp-server/index.js"],
+        "args": ["/absolute/path/to/read-only-local-mysql-mcp-server/dist/ index.js"],
         "env": {
           "DB_HOST": "localhost",
           "DB_PORT": "3306",
@@ -108,7 +108,7 @@ Add the MySQL server configuration:
   "mcpServers": {
     "mysql": {
       "command": "node",
-      "args": ["/absolute/path/to/index.js"],
+      "args": ["/absolute/path/to/dist/index.js"],
       "env": {
         "DB_HOST": "localhost",
         "DB_PORT": "3306",
@@ -123,10 +123,7 @@ Add the MySQL server configuration:
 
 ### Using mise for Node.js
 
-If you're using [mise](https://mise.jdx.dev/) for Node.js version management, make sure to use the full path to the Node.js executable in your configuration. For example:
-
-- Replace `"command": "node"` with `"command": "/Users/YOUR_USERNAME/.local/share/mise/installs/node/VERSION/bin/node"`
-- You can find your mise Node.js path by running: `which node` when mise is active
+If you're using [mise](https://mise.jdx.dev/) for Node.js version management, make sure to use the full path to the Node.js executable in your configuration.
 
 ### Environment Variables
 
@@ -194,7 +191,7 @@ FLUSH PRIVILEGES;
 ### Configuration Issues
 
 1. **Restart required**: Always restart Claude Desktop after configuration changes
-2. **Path accuracy**: Ensure the absolute path to `index.js` is correct
+2. **Path accuracy**: Ensure the absolute path to `dist/index.js` is correct
 3. **JSON syntax**: Validate your `claude_desktop_config.json` format
 
 ### Debug Mode
