@@ -12,28 +12,35 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 
 ## Prerequisites
 
-- Node.js (v14 or higher) - If using mise, update the command path accordingly
+- Node.js (v16 or higher) - If using mise, update the command path accordingly
 - MySQL database server
 - Claude Desktop application
 
 ## Installation
 
-### Option 1: Installation with Claude Code
+### Option 1: Install from npm (Recommended)
+
+```bash
+npm install -g @hovecapital/read-only-mysql-mcp-server
+```
+
+### Option 2: Installation with Claude Code
 
 If you're using Claude Code, you can easily install this MCP server:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/read-only-local-mysql-mcp-server.git
+git clone https://github.com/hovecapital/read-only-local-mysql-mcp-server.git
 cd read-only-local-mysql-mcp-server
 
 # Install dependencies and build
+npm install
 npm run build
 ```
 
 Then configure Claude Code by adding to your MCP settings.
 
-### Option 2: Manual Installation
+### Option 3: Manual Installation
 
 #### 1. Clone or Download
 
@@ -42,14 +49,13 @@ Save the repository to a directory on your system:
 ```bash
 mkdir ~/mcp-servers/mysql
 cd ~/mcp-servers/mysql
-git clone https://github.com/your-username/read-only-local-mysql-mcp-server.git .
+git clone https://github.com/hovecapital/read-only-local-mysql-mcp-server.git .
 ```
 
 #### 2. Install Dependencies
 
 ```bash
 npm install
-# Or for production deployment:
 npm run build
 ```
 
@@ -108,7 +114,7 @@ Add the MySQL server configuration:
   "mcpServers": {
     "mysql": {
       "command": "node",
-      "args": ["/absolute/path/to/dist/index.js"],
+      "args": ["/absolute/path/to/read-only-local-mysql-mcp-server/dist/index.js"],
       "env": {
         "DB_HOST": "localhost",
         "DB_PORT": "3306",
@@ -173,8 +179,8 @@ For enhanced security, create a dedicated read-only user for the MCP server:
 -- Create a read-only user
 CREATE USER 'claude_readonly'@'localhost' IDENTIFIED BY 'secure_password';
 
--- Grant only SELECT permissions
-GRANT SELECT ON your_database.* TO 'claude_readonly'@'localhost';
+-- Grant only SELECT permissions on your specific database
+GRANT SELECT ON your_database_name.* TO 'claude_readonly'@'localhost';
 
 -- Apply the changes
 FLUSH PRIVILEGES;
@@ -199,15 +205,20 @@ FLUSH PRIVILEGES;
 To see server logs, you can run the server manually:
 
 ```bash
-node index.js
+node dist/index.js
 ```
 
 ## File Structure
 
 ```bash
 ~/mcp-servers/mysql/
-├── index.js
+├── src/
+│   └── index.ts
+├── dist/
+│   ├── index.js
+│   └── index.d.ts
 ├── package.json
+├── tsconfig.json
 └── node_modules/
 ```
 
