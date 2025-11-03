@@ -1,7 +1,7 @@
 {
   "name": "@hovecapital/read-only-mysql-mcp-server",
   "mcpName": "capital.hove/read-only-mysql-mcp-server",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "commonjs",
   "description": "A Model Context Protocol (MCP) server that enables Claude Desktop to interact with MySQL databases through read-only queries",
   "main": "dist/index.js",

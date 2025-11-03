@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.9...v0.0.10) (2025-11-03)
+
+
+### Bug Fixes
+
+* remove status even though the schema reqs it! ([f08a9e9](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/f08a9e9e2f75842df9df51a48c72f254530d9c40))
+
 ## [0.0.9](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.8...v0.0.9) (2025-11-03)
 
 
