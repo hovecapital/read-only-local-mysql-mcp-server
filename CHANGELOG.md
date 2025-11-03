@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.16](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.15...v0.0.16) (2025-11-03)
+
+
+### Bug Fixes
+
+* update version for mcp reg ([e52ed4e](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/e52ed4e926de4f46b02b721a38ae0b2ee21a5ed3))
+
 ## [0.0.15](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.14...v0.0.15) (2025-11-03)
 
 
