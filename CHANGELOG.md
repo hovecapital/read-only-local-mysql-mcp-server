@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.7...v0.0.8) (2025-11-03)
+
+
+### Bug Fixes
+
+* use a json validator to fix ([e071717](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/e0717177e41845187e6e62f1b444e2b36f488326))
+
 ## [0.0.7](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.6...v0.0.7) (2025-11-03)
 
 
