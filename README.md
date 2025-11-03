@@ -1,5 +1,8 @@
 # MySQL MCP Server
 
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-Available-blue)](https://registry.modelcontextprotocol.io/servers/capital.hove/read-only-local-mysql-mcp-server)
+[![npm version](https://img.shields.io/npm/v/@hovecapital/read-only-mysql-mcp-server.svg)](https://www.npmjs.com/package/@hovecapital/read-only-mysql-mcp-server)
+
 A Model Context Protocol (MCP) server that enables Claude Desktop to interact with MySQL databases through natural language queries.
 
 ## Features
@@ -18,13 +21,19 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 
 ## Installation
 
-### Option 1: Install from npm (Recommended)
+### Option 1: Install from MCP Registry (Recommended)
+
+This server is available in the [Model Context Protocol Registry](https://registry.modelcontextprotocol.io/servers/capital.hove/read-only-local-mysql-mcp-server).
+
+Visit the registry page for the latest installation instructions and configuration details for your Claude Desktop or Claude Code setup.
+
+### Option 2: Install from npm
 
 ```bash
 npm install -g @hovecapital/read-only-mysql-mcp-server
 ```
 
-### Option 2: Installation with Claude Code
+### Option 3: Installation with Claude Code
 
 If you're using Claude Code, you can easily install this MCP server:
 
@@ -40,7 +49,7 @@ npm run build
 
 Then configure Claude Code by adding to your MCP settings.
 
-### Option 3: Manual Installation
+### Option 4: Manual Installation
 
 #### 1. Clone or Download
 
