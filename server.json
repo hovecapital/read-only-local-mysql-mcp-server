@@ -3,7 +3,6 @@
   "name": "hove.capital/read-only-mysql-mcp-server",
   "description": "MCP server for read-only MySQL database queries in Claude Desktop",
   "version": "0.1.0",
-  "status": "active",
   "websiteUrl": "https://github.com/hovecapital/read-only-local-mysql-mcp-server",
   "repository": {
     "url": "https://github.com/hovecapital/read-only-local-mysql-mcp-server",
