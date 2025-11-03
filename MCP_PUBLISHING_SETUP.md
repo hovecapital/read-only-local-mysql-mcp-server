@@ -12,6 +12,7 @@ This server uses **Release Please** for automated version management and publish
 - **Publishing:** Automatic to npm and MCP Registry on release
 
 When you push commits to `main` using Conventional Commit format, Release Please automatically:
+
 1. Creates/updates a release PR with changelog
 2. When merged, publishes to npm and MCP Registry
 3. Creates GitHub releases with proper tags
@@ -72,6 +73,7 @@ echo "Verify both hex keys are exactly 64 characters each"
 ```
 
 **Important:**
+
 - The private key should be exactly 64 hex characters (32 bytes)
 - The public key base64 should be exactly 44 characters with `=` padding
 - Never commit the private key files to the repository
@@ -99,6 +101,7 @@ curl https://hove.capital/.well-known/mcp-registry-auth
 ```
 
 Should return:
+
 ```
 v=MCPv1; k=ed25519; p=MCqGKWNKpz4LnK/M74yTVhoTQMDqGKUp5Iw5myd4UVM=
 ```
@@ -112,10 +115,12 @@ Add the required secrets for automated publishing:
 3. Add two secrets:
 
 **Secret 1: MCP_PRIVATE_KEY**
+
 - **Name:** `MCP_PRIVATE_KEY`
 - **Value:** Paste the 64 hex character private key from `private_key_hex.txt`
 
 **Secret 2: NPM_TOKEN**
+
 - **Name:** `NPM_TOKEN`
 - **Value:** Your npm authentication token with publish permissions
 - Get token from: <https://www.npmjs.com/settings/your-username/tokens>
@@ -129,6 +134,7 @@ mcp-publisher login http --domain hove.capital --private-key $(cat private_key_h
 ```
 
 If successful, you should see:
+
 ```
 ✓ Successfully logged in
 ```
@@ -153,18 +159,21 @@ This project uses [Release Please](https://github.com/googleapis/release-please)
 Use these commit message prefixes to control versioning:
 
 **Patch Release (0.0.X) - Bug fixes:**
+
 ```bash
 git commit -m "fix: resolve authentication timeout issue"
 git commit -m "fix(api): correct parameter validation in user endpoint"
 ```
 
 **Minor Release (0.X.0) - New features:**
+
 ```bash
 git commit -m "feat: add user profile export functionality"
 git commit -m "feat(dashboard): implement real-time analytics widget"
 ```
 
 **Major Release (X.0.0) - Breaking changes:**
+
 ```bash
 git commit -m "feat!: migrate to new authentication API
 
@@ -173,6 +182,7 @@ All clients must update their integration code."
 ```
 
 **Non-versioning commits (no release):**
+
 ```bash
 git commit -m "docs: update API documentation examples"
 git commit -m "chore: update dependencies"
@@ -183,6 +193,7 @@ git commit -m "test: add integration tests for payment flow"
 ### Release Workflow Example
 
 1. **Make your changes:**
+
 ```bash
 # Add a new feature
 git add .
@@ -205,6 +216,7 @@ git push origin main
    - Server is published to MCP Registry
 
 5. **Verify publication:**
+
 ```bash
 curl "https://registry.modelcontextprotocol.io/v0/servers?search=capital.hove/read-only-mysql-mcp-server"
 ```
