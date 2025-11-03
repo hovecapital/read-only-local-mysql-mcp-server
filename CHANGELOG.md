@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.11](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.10...v0.0.11) (2025-11-03)
+
+
+### Bug Fixes
+
+* correct reg url ([dd8fc00](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/dd8fc0099c9c4982cfd69eea3eee515ccae1d727))
+
 ## [0.0.10](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.9...v0.0.10) (2025-11-03)
 
 
