@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.8...v0.0.9) (2025-11-03)
+
+
+### Bug Fixes
+
+* use a programmtic validator ([4798ea9](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/4798ea93491d4791ddc2f503d98caf7d2675c97f))
+
 ## [0.0.8](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.7...v0.0.8) (2025-11-03)
 
 
