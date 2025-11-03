@@ -41,21 +41,18 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
 
       # Publish to MCP Registry when release is created
-      - name: Setup Homebrew
+      - name: Install MCP Publisher
         if: ${{ steps.release.outputs.release_created }}
-        uses: Homebrew/actions/setup-homebrew@master
-
-      - name: Install mcp-publisher
-        if: ${{ steps.release.outputs.release_created }}
-        run: brew install modelcontextprotocol/tap/mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.1.0/mcp-publisher_1.1.0_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
 
       - name: Authenticate with domain
         if: ${{ steps.release.outputs.release_created }}
         env:
           MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
         run: |
-          mcp-publisher login http --domain hove.capital --private-key "$MCP_PRIVATE_KEY"
+          ./mcp-publisher login http --domain hove.capital --private-key "$MCP_PRIVATE_KEY"
 
       - name: Publish to MCP Registry
         if: ${{ steps.release.outputs.release_created }}
-        run: mcp-publisher publish
+        run: ./mcp-publisher publish
