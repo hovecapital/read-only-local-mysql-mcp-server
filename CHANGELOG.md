@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.5...v0.0.6) (2025-11-03)
+
+
+### Bug Fixes
+
+* update to latest spec ([88a1e36](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/88a1e36a03f5f4a801597a5bfccbb45c51c4064c))
+
 ## [0.0.5](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.4...v0.0.5) (2025-11-03)
 
 
