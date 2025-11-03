@@ -23,6 +23,11 @@ jobs:
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
 
+      - name: Configure Git for authenticated access
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          git config --global url."https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
