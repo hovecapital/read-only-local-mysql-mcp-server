@@ -1,5 +1,6 @@
 {
   "name": "@hovecapital/read-only-mysql-mcp-server",
+  "mcpName": "capital.hove/read-only-mysql-mcp-server",
   "version": "0.1.0",
   "type": "commonjs",
   "description": "A Model Context Protocol (MCP) server that enables Claude Desktop to interact with MySQL databases through read-only queries",
@@ -57,6 +58,8 @@
     "@types/node": "^20.19.9",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.2",
     "prettier": "^3.6.2",

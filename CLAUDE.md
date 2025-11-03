@@ -9,7 +9,10 @@
 ## Code Quality Rules
 
 - **No code repetition**: Repeated code must be extracted into reusable functions.
-- **Descriptive naming**: Use clear, descriptive names for variables, functions, and types.
+- **Descriptive naming**: Use clear, descriptive nmcp-publisher publish                                           778ms  Mon Nov  3 10:19:00 2025
+Publishing to https://registry.modelcontextprotocol.io...
+✓ Successfully published
+✓ Server capital.hove/read-only-mysql-mcp-server version 0.1.0ames for variables, functions, and types.
 - **Prefer `const` assertions**: Use `as const` for literal types instead of manual type definitions where appropriate.
 - **No implicit returns**: Always explicitly return values from functions.
 - **Use utility types**: Leverage TypeScript utility types (`Pick`, `Omit`, `Partial`, etc.) instead of manual type definitions.

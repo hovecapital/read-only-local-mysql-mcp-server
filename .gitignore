@@ -108,3 +108,12 @@ mcp-server.log
 start-local.sh
 start-dev
 .claude
+
+# MCP Publisher private keys (never commit!)
+*.pem
+*_key*.txt
+private_key_hex.txt
+public_key_hex.txt
+public_key_base64.txt
+private.pem
+public.pem
