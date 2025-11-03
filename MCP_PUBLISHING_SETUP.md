@@ -1,16 +1,27 @@
 # MCP Registry Publishing Setup
 
-This document provides instructions for setting up automated publishing to the MCP Registry using your custom domain `hove.capital`.
+This document provides instructions for setting up fully automated publishing to npm and the MCP Registry using Release Please and your custom domain `hove.capital`.
 
 ## Overview
 
-This server is configured to publish to the MCP Registry under the namespace `capital.hove/read-only-mysql-mcp-server` using domain-based authentication.
+This server uses **Release Please** for automated version management and publishing:
+
+- **Namespace:** `capital.hove/read-only-mysql-mcp-server`
+- **Authentication:** HTTP-based domain authentication
+- **Versioning:** Automated via Conventional Commits
+- **Publishing:** Automatic to npm and MCP Registry on release
+
+When you push commits to `main` using Conventional Commit format, Release Please automatically:
+1. Creates/updates a release PR with changelog
+2. When merged, publishes to npm and MCP Registry
+3. Creates GitHub releases with proper tags
 
 ## Prerequisites
 
-- Access to DNS settings for `hove.capital`
+- Access to your web server at `hove.capital` (for HTTP authentication file)
 - Admin access to this GitHub repository
-- The `mcp-publisher` CLI tool (for initial setup)
+- npm publish permissions for `@hovecapital` organization
+- The `mcp-publisher` CLI tool (for initial setup and testing)
 
 ## One-Time Setup
 
@@ -92,17 +103,22 @@ Should return:
 v=MCPv1; k=ed25519; p=MCqGKWNKpz4LnK/M74yTVhoTQMDqGKUp5Iw5myd4UVM=
 ```
 
-### Step 5: Add Private Key to GitHub Secrets
+### Step 5: Add GitHub Secrets
 
-Add the private key as a GitHub Actions secret:
+Add the required secrets for automated publishing:
 
 1. Go to your GitHub repository: <https://github.com/hovecapital/read-only-local-mysql-mcp-server>
 2. Navigate to **Settings** → **Secrets and variables** → **Actions**
-3. Click **New repository secret**
-4. Set:
-   - **Name:** `MCP_PRIVATE_KEY`
-   - **Secret:** Paste the 64 hex character private key from `private_key_hex.txt`
-5. Click **Add secret**
+3. Add two secrets:
+
+**Secret 1: MCP_PRIVATE_KEY**
+- **Name:** `MCP_PRIVATE_KEY`
+- **Value:** Paste the 64 hex character private key from `private_key_hex.txt`
+
+**Secret 2: NPM_TOKEN**
+- **Name:** `NPM_TOKEN`
+- **Value:** Your npm authentication token with publish permissions
+- Get token from: <https://www.npmjs.com/settings/your-username/tokens>
 
 ### Step 6: Test Authentication (Optional)
 
@@ -119,52 +135,86 @@ If successful, you should see:
 
 ## Publishing a New Version
 
-Once the one-time setup is complete, publishing is automated:
+This project uses [Release Please](https://github.com/googleapis/release-please) for automated releases. Publishing is fully automated based on your commit messages - no manual version bumping or tagging required!
 
-### Step 1: Update Version
+### How It Works
 
-Update the version in both files:
+1. **Make changes** to your code
+2. **Commit using Conventional Commits** (see below)
+3. **Push to main branch**
+4. **Release Please automatically**:
+   - Creates/updates a release PR with changelog
+   - When you merge the PR, it creates a GitHub release
+   - Publishes to npm
+   - Publishes to MCP Registry
 
-- `package.json` - Change the `version` field
-- `server.json` - Change the `version` field
+### Conventional Commit Format
 
-Make sure both versions match!
+Use these commit message prefixes to control versioning:
 
-### Step 2: Commit Changes
-
+**Patch Release (0.0.X) - Bug fixes:**
 ```bash
-git add package.json server.json
-git commit -m "chore: bump version to v0.1.1"
+git commit -m "fix: resolve authentication timeout issue"
+git commit -m "fix(api): correct parameter validation in user endpoint"
 ```
 
-### Step 3: Create and Push Version Tag
-
+**Minor Release (0.X.0) - New features:**
 ```bash
-git tag v0.1.1
-git push origin v0.1.1
+git commit -m "feat: add user profile export functionality"
+git commit -m "feat(dashboard): implement real-time analytics widget"
 ```
 
-This will trigger the GitHub Actions workflow that:
+**Major Release (X.0.0) - Breaking changes:**
+```bash
+git commit -m "feat!: migrate to new authentication API
 
-1. Checks out the code
-2. Downloads mcp-publisher
-3. Authenticates using your domain and private key
-4. Publishes to the MCP Registry
+BREAKING CHANGE: The old auth.login() method has been replaced with auth.authenticate().
+All clients must update their integration code."
+```
 
-### Step 4: Monitor Workflow
+**Non-versioning commits (no release):**
+```bash
+git commit -m "docs: update API documentation examples"
+git commit -m "chore: update dependencies"
+git commit -m "ci: add automated security scanning"
+git commit -m "test: add integration tests for payment flow"
+```
 
-Watch the workflow execution at:
-<https://github.com/hovecapital/read-only-local-mysql-mcp-server/actions>
+### Release Workflow Example
 
-### Step 5: Verify Publication
+1. **Make your changes:**
+```bash
+# Add a new feature
+git add .
+git commit -m "feat: add support for PostgreSQL connections"
+git push origin main
+```
 
-After successful workflow completion, verify the server is published:
+2. **Release Please creates a PR:**
+   - Automatically creates/updates a release PR
+   - PR includes updated CHANGELOG.md
+   - PR shows the new version number based on commits
 
+3. **Review and merge the release PR:**
+   - Review the changelog
+   - Merge the PR when ready
+
+4. **Automatic publishing:**
+   - GitHub release is created with tag (e.g., `v0.2.0`)
+   - Package is published to npm
+   - Server is published to MCP Registry
+
+5. **Verify publication:**
 ```bash
 curl "https://registry.modelcontextprotocol.io/v0/servers?search=capital.hove/read-only-mysql-mcp-server"
 ```
 
-Or visit the MCP Registry website to search for your server.
+### Monitor Workflow
+
+Watch the workflow execution at:
+<https://github.com/hovecapital/read-only-local-mysql-mcp-server/actions>
+
+The workflow runs on every push to main and handles everything automatically.
 
 ## Troubleshooting
 
@@ -181,16 +231,24 @@ Or visit the MCP Registry website to search for your server.
 - Ensure the private key matches the public key in your HTTP auth file
 - Confirm the HTTP auth file is still accessible and hasn't been deleted
 
-### Version Mismatch
+### Release PR Not Created
 
-- Ensure `package.json` and `server.json` have the same version number
-- Both files must be committed before creating the version tag
+- Ensure you're using Conventional Commit format (`feat:`, `fix:`, etc.)
+- Check that commits were pushed to the `main` branch
+- Verify workflow permissions are set correctly in `.github/workflows/release-please.yml`
+- Non-versioning commits (`docs:`, `chore:`, `ci:`, `test:`) don't trigger releases
 
-### Workflow Doesn't Trigger
+### NPM Publication Failed
 
-- Ensure the tag format matches `v*` (e.g., v0.1.1, v1.0.0)
-- Check that the workflow file exists at `.github/workflows/publish-mcp.yml`
-- Verify you pushed the tag to GitHub: `git push origin v0.1.1`
+- Verify the `NPM_TOKEN` secret is set correctly in GitHub repository secrets
+- Ensure you have publish permissions for the `@hovecapital` npm organization
+- Check the npm registry is accessible from GitHub Actions
+
+### Version Mismatch Between Files
+
+- Release Please automatically updates both `package.json` and `server.json`
+- If manual edits are needed, ensure both files have matching versions
+- The `.release-please-manifest.json` tracks the current version
 
 ## Security Notes
 
@@ -204,6 +262,8 @@ Or visit the MCP Registry website to search for your server.
 
 - [MCP Registry Documentation](https://github.com/modelcontextprotocol/registry)
 - [MCP Publisher Guide](https://github.com/modelcontextprotocol/publisher)
+- [Release Please Documentation](https://github.com/googleapis/release-please)
+- [Conventional Commits Specification](https://www.conventionalcommits.org/)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 
 ## Support
