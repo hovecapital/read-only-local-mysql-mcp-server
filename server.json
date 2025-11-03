@@ -1,19 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "hove.capital/read-only-mysql-mcp-server",
-  "description": "MCP server for read-only MySQL database queries in Claude Desktop",
-  "version": "0.1.0",
-  "websiteUrl": "https://github.com/hovecapital/read-only-local-mysql-mcp-server",
+  "name": "capital.hove/read-only-local-mysql-mcp-server",
+  "description": "MCP server enabling read-only MySQL queries for Claude Desktop",
   "repository": {
     "url": "https://github.com/hovecapital/read-only-local-mysql-mcp-server",
     "source": "github"
   },
+  "version": "0.0.11",
   "packages": [
     {
       "registryType": "npm",
-      "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@hovecapital/read-only-mysql-mcp-server",
-      "version": "0.1.0",
+      "version": "0.0.11",
       "transport": {
         "type": "stdio"
       }
