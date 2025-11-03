@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.6...v0.0.7) (2025-11-03)
+
+
+### Bug Fixes
+
+* update schema url ([191460f](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/191460f8cf6b4812e21fe1dbdf35b469552dc69e))
+
 ## [0.0.6](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.5...v0.0.6) (2025-11-03)
 
 
