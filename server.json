@@ -6,12 +6,12 @@
     "url": "https://github.com/hovecapital/read-only-local-mysql-mcp-server",
     "source": "github"
   },
-  "version": "0.0.11",
+  "version": "0.0.13",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@hovecapital/read-only-mysql-mcp-server",
-      "version": "0.0.11",
+      "version": "0.0.13",
       "transport": {
         "type": "stdio"
       }
