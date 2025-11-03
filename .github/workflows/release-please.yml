@@ -41,19 +41,23 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
 
       # Publish to MCP Registry when release is created
-      - name: Download mcp-publisher
+      - name: Setup Go
         if: ${{ steps.release.outputs.release_created }}
-        run: |
-          curl -L https://github.com/modelcontextprotocol/publisher/releases/latest/download/mcp-publisher-linux-amd64 -o mcp-publisher
-          chmod +x mcp-publisher
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Install mcp-publisher
+        if: ${{ steps.release.outputs.release_created }}
+        run: go install github.com/modelcontextprotocol/publisher/cmd/mcp-publisher@latest
 
       - name: Authenticate with domain
         if: ${{ steps.release.outputs.release_created }}
         env:
           MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
         run: |
-          ./mcp-publisher login http --domain hove.capital --private-key "$MCP_PRIVATE_KEY"
+          ~/go/bin/mcp-publisher login http --domain hove.capital --private-key "$MCP_PRIVATE_KEY"
 
       - name: Publish to MCP Registry
         if: ${{ steps.release.outputs.release_created }}
-        run: ./mcp-publisher publish
+        run: ~/go/bin/mcp-publisher publish
