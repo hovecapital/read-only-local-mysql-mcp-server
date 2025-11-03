@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.14](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.13...v0.0.14) (2025-11-03)
+
+
+### Bug Fixes
+
+* update npm target version ([8828d5a](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/8828d5a00a55571bd89bb031de1e603b0804da7f))
+
 ## [0.0.13](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.12...v0.0.13) (2025-11-03)
 
 
