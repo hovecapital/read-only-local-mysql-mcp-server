@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 
+* gh access issue in ci ([731e1ab](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/731e1abcbde9eaef017c62b5fad943f0235fd3b6))
 * use offical method for ci publishing ([2d35e99](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/2d35e99cc4987b576ed6b28ae499bd10956ddefd))
 
 ## [0.0.4](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/v0.0.3...v0.0.4) (2025-11-03)
