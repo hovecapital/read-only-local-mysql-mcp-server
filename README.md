@@ -1,6 +1,6 @@
 # MySQL MCP Server
 
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-Available-blue)](https://registry.modelcontextprotocol.io/servers/capital.hove/read-only-local-mysql-mcp-server)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-Available-blue)](https://registry.modelcontextprotocol.io)
 [![npm version](https://img.shields.io/npm/v/@hovecapital/read-only-mysql-mcp-server.svg)](https://www.npmjs.com/package/@hovecapital/read-only-mysql-mcp-server)
 
 A Model Context Protocol (MCP) server that enables Claude Desktop to interact with MySQL databases through natural language queries.
@@ -13,6 +13,60 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 - 📊 JSON formatted query results
 - 🔐 Environment-based configuration for database credentials
 
+## Quick Start
+
+### For Claude Code Users (Recommended - Easiest Method)
+
+```bash
+claude mcp add mysql -s user -- npx -y @hovecapital/read-only-mysql-mcp-server
+```
+
+Then set your database environment variables:
+
+```bash
+export DB_HOST=localhost
+export DB_PORT=3306
+export DB_DATABASE=your_database_name
+export DB_USERNAME=your_username
+export DB_PASSWORD=your_password
+```
+
+**Done!** Restart Claude Code and ask: "What tables are in my database?"
+
+### For Claude Desktop Users (Manual Configuration)
+
+**1. Open your config file:**
+
+```bash
+# macOS
+open ~/Library/Application\ Support/Claude/claude_desktop_config.json
+
+# Windows
+notepad %APPDATA%\Claude\claude_desktop_config.json
+```
+
+**2. Add this configuration:**
+
+```json
+{
+  "mcpServers": {
+    "mysql": {
+      "command": "npx",
+      "args": ["-y", "@hovecapital/read-only-mysql-mcp-server"],
+      "env": {
+        "DB_HOST": "localhost",
+        "DB_PORT": "3306",
+        "DB_DATABASE": "your_database_name",
+        "DB_USERNAME": "your_username",
+        "DB_PASSWORD": "your_password"
+      }
+    }
+  }
+}
+```
+
+**3. Save, restart Claude Desktop, and test!**
+
 ## Prerequisites
 
 - Node.js (v16 or higher) - If using mise, update the command path accordingly
@@ -23,9 +77,69 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 
 ### Option 1: Install from MCP Registry (Recommended)
 
-This server is available in the [Model Context Protocol Registry](https://registry.modelcontextprotocol.io/servers/capital.hove/read-only-local-mysql-mcp-server).
+This server is published in the [Model Context Protocol Registry](https://registry.modelcontextprotocol.io) as `capital.hove/read-only-local-mysql-mcp-server`.
 
-Visit the registry page for the latest installation instructions and configuration details for your Claude Desktop or Claude Code setup.
+#### Method A: Claude Code CLI (Easiest!)
+
+```bash
+claude mcp add mysql -s user -- npx -y @hovecapital/read-only-mysql-mcp-server
+```
+
+Then configure your database credentials using environment variables. Restart Claude Code and you're done!
+
+**Benefits:**
+
+- One command installation
+- No manual JSON editing
+- Automatic configuration
+
+#### Method B: Manual JSON Configuration
+
+**For Claude Desktop:**
+
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "mysql": {
+      "command": "npx",
+      "args": ["-y", "@hovecapital/read-only-mysql-mcp-server"],
+      "env": {
+        "DB_HOST": "localhost",
+        "DB_PORT": "3306",
+        "DB_DATABASE": "your_database_name",
+        "DB_USERNAME": "your_username",
+        "DB_PASSWORD": "your_password"
+      }
+    }
+  }
+}
+```
+
+**For Claude Code:**
+
+Edit `~/.config/claude-code/settings.json` (macOS/Linux) or `%APPDATA%\claude-code\settings.json` (Windows):
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "mysql": {
+        "command": "npx",
+        "args": ["-y", "@hovecapital/read-only-mysql-mcp-server"],
+        "env": {
+          "DB_HOST": "localhost",
+          "DB_PORT": "3306",
+          "DB_DATABASE": "your_database_name",
+          "DB_USERNAME": "your_username",
+          "DB_PASSWORD": "your_password"
+        }
+      }
+    }
+  }
+}
+```
 
 ### Option 2: Install from npm
 
@@ -70,9 +184,11 @@ npm run build
 
 ## Configuration
 
+> **Note:** If you installed via Option 1 (MCP Registry with npx), you've already configured everything! This section is for users who chose Options 2, 3, or 4 (npm or manual installation).
+
 ### Claude Code Configuration
 
-If you're using Claude Code, add the MySQL server to your MCP settings:
+If you're using Claude Code with a manual installation, add the MySQL server to your MCP settings:
 
 1. Open your Claude Code settings (typically in `~/.config/claude-code/settings.json` on macOS/Linux or `%APPDATA%\claude-code\settings.json` on Windows)
 
@@ -102,7 +218,7 @@ If you're using Claude Code, add the MySQL server to your MCP settings:
 
 ### Claude Desktop Configuration
 
-Open your Claude Desktop configuration file:
+If you're using Claude Desktop with a manual installation, open your Claude Desktop configuration file:
 
 **macOS:**
 
