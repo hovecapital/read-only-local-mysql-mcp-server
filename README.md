@@ -7,11 +7,11 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 
 ## Features
 
-- 🔍 Execute read-only SQL queries through Claude Desktop
-- 🛡️ Built-in security with query validation (only SELECT statements allowed)
-- 🔌 Easy integration with Claude Desktop
-- 📊 JSON formatted query results
-- 🔐 Environment-based configuration for database credentials
+- Execute read-only SQL queries through Claude Desktop
+- Built-in security with query validation (only SELECT statements allowed)
+- Easy integration with Claude Desktop
+- JSON formatted query results
+- Environment-based configuration for database credentials
 
 ## Quick Start
 
@@ -214,7 +214,7 @@ If you're using Claude Code with a manual installation, add the MySQL server to 
 }
 ```
 
-3. Restart Claude Code for the changes to take effect.
+1. Restart Claude Code for the changes to take effect.
 
 ### Claude Desktop Configuration
 
