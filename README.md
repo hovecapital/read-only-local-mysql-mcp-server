@@ -8,6 +8,7 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 ## Features
 
 - Execute read-only SQL queries through Claude Desktop
+- **Dynamic connection configuration** — connect to any MySQL database at runtime via connection string
 - Built-in security with query validation (only SELECT statements allowed)
 - Easy integration with Claude Desktop
 - JSON formatted query results
@@ -282,6 +283,58 @@ If you're using [mise](https://mise.jdx.dev/) for Node.js version management, ma
 ```
 
 Claude will automatically convert your natural language requests into appropriate SQL queries and execute them against your database.
+
+## Tools
+
+### `connect`
+
+Connect to a MySQL database using a connection string. The connection persists for subsequent queries until changed or disconnected.
+
+**Parameters:**
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `connectionString` | Yes | MySQL connection string (e.g., `mysql://user:password@host:port/database`) |
+
+### `disconnect`
+
+Disconnect from the current runtime database and revert to the default environment-configured connection. Takes no parameters.
+
+### `query`
+
+Run a read-only SQL query against the currently connected database.
+
+**Parameters:**
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `sql` | Yes | SQL query to execute (read-only) |
+| `connectionString` | No | MySQL connection string to override the current connection for this query only |
+
+## Dynamic Connection
+
+The server supports switching databases at runtime without restarting. Connection priority:
+
+1. **Per-query `connectionString`** — overrides everything for a single query
+2. **Runtime connection** (from `connect` tool) — persists until `disconnect` is called
+3. **Environment variables** — the default fallback
+
+**Connection string format:**
+
+```
+mysql://username:password@hostname:port/database_name
+```
+
+**Example workflow:**
+
+```
+1. connect → mysql://analyst:pass@prod-db:3306/analytics
+2. query   → SELECT COUNT(*) FROM events
+3. query   → SELECT * FROM users LIMIT 5 (uses the same analytics connection)
+4. query   → SELECT * FROM orders LIMIT 5, connectionString: mysql://analyst:pass@prod-db:3306/sales
+              (one-off override — does not change the stored connection)
+5. disconnect → reverts to env var defaults
+```
 
 ## Security Features
 
