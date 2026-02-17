@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/read-only-mysql-mcp-server-v0.0.17...read-only-mysql-mcp-server-v0.1.0) (2026-02-17)
+
+
+### Features
+
+* add connection params ([4a12c00](https://github.com/hovecapital/read-only-local-mysql-mcp-server/commit/4a12c0003d2b3c99376077db4ed77c280067ab24))
+
 ## [0.0.17](https://github.com/hovecapital/read-only-local-mysql-mcp-server/compare/read-only-mysql-mcp-server-v0.0.16...read-only-mysql-mcp-server-v0.0.17) (2025-11-03)
 
 
