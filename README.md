@@ -19,7 +19,7 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 ### For Claude Code Users (Recommended - Easiest Method)
 
 ```bash
-claude mcp add mysql -s user -- npx -y @hovecapital/read-only-mysql-mcp-server
+claude mcp add mysql -s user -- npx -y @hovecapital/read-only-mysql-mcp-server@latest
 ```
 
 Then set your database environment variables:
@@ -53,7 +53,7 @@ notepad %APPDATA%\Claude\claude_desktop_config.json
   "mcpServers": {
     "mysql": {
       "command": "npx",
-      "args": ["-y", "@hovecapital/read-only-mysql-mcp-server"],
+      "args": ["-y", "@hovecapital/read-only-mysql-mcp-server@latest"],
       "env": {
         "DB_HOST": "localhost",
         "DB_PORT": "3306",
@@ -83,7 +83,7 @@ This server is published in the [Model Context Protocol Registry](https://regist
 #### Method A: Claude Code CLI (Easiest!)
 
 ```bash
-claude mcp add mysql -s user -- npx -y @hovecapital/read-only-mysql-mcp-server
+claude mcp add mysql -s user -- npx -y @hovecapital/read-only-mysql-mcp-server@latest
 ```
 
 Then configure your database credentials using environment variables. Restart Claude Code and you're done!
@@ -105,7 +105,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "mysql": {
       "command": "npx",
-      "args": ["-y", "@hovecapital/read-only-mysql-mcp-server"],
+      "args": ["-y", "@hovecapital/read-only-mysql-mcp-server@latest"],
       "env": {
         "DB_HOST": "localhost",
         "DB_PORT": "3306",
@@ -128,7 +128,7 @@ Edit `~/.config/claude-code/settings.json` (macOS/Linux) or `%APPDATA%\claude-co
     "servers": {
       "mysql": {
         "command": "npx",
-        "args": ["-y", "@hovecapital/read-only-mysql-mcp-server"],
+        "args": ["-y", "@hovecapital/read-only-mysql-mcp-server@latest"],
         "env": {
           "DB_HOST": "localhost",
           "DB_PORT": "3306",
