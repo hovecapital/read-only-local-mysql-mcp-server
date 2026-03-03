@@ -286,6 +286,23 @@ class MySQLServer {
       "drop",
       "alter",
       "create",
+      "load_file",
+      "outfile",
+      "dumpfile",
+      "set",
+      "grant",
+      "revoke",
+      "rename",
+      "replace",
+      "lock",
+      "unlock",
+      "call",
+      "exec",
+      "execute",
+      "start",
+      "begin",
+      "commit",
+      "rollback",
     ] as const;
 
     return !writeOperations.some((op) => normalizedSql.startsWith(op));
