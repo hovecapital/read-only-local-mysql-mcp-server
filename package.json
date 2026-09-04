@@ -24,7 +24,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,json,md}\"",
     "type-check": "tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format:check",
-    "prepublishOnly": "npm run validate && npm run build"
+    "prepublishOnly": "npm run validate && npm run build",
+    "test": "npm run build && node --test dist/readOnlyQuery.test.js"
   },
   "keywords": [
     "mcp",

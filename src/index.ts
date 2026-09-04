@@ -10,12 +10,25 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import mysql from "mysql2/promise";
 import type { Connection } from "mysql2/promise";
+import { assertReadOnlyQuery } from "./readOnlyQuery.js";
 
 const DB_HOST: string = process.env.DB_HOST ?? "mysql";
 const DB_PORT: string = process.env.DB_PORT ?? "3306";
 const DB_DATABASE: string = process.env.DB_DATABASE ?? "database";
 const DB_USERNAME: string = process.env.DB_USERNAME ?? "root";
 const DB_PASSWORD: string = process.env.DB_PASSWORD ?? "";
+// Hosts a connection string may point at. Stops the connect tools being used as a port scanner.
+const DB_ALLOWED_HOSTS: ReadonlySet<string> = new Set(
+  [
+    DB_HOST,
+    "localhost",
+    "127.0.0.1",
+    "::1",
+    ...(process.env.DB_ALLOWED_HOSTS?.split(",") ?? []),
+  ].map((host) => host.trim().toLowerCase())
+);
+const CONNECTION_FAILED_MESSAGE =
+  "Failed to connect to MySQL. Details were written to the server log.";
 
 type ConnectToolArguments = {
   connectionString: string;
@@ -45,13 +58,19 @@ function parseConnectionString(connectionString: string): DatabaseConfig {
     );
   }
 
-  const host = url.hostname;
+  const host = url.hostname.replace(/^\[|\]$/g, "");
   const database = url.pathname.slice(1);
 
   if (!host) {
     throw new McpError(
       ErrorCode.InvalidParams,
       "Connection string must include a host"
+    );
+  }
+  if (!DB_ALLOWED_HOSTS.has(host.toLowerCase())) {
+    throw new McpError(
+      ErrorCode.InvalidParams,
+      `Host "${host}" is not allowed. Add it to the DB_ALLOWED_HOSTS environment variable.`
     );
   }
   if (!database) {
@@ -111,10 +130,7 @@ class MySQLServer {
       return await mysql.createConnection(config);
     } catch (error) {
       console.error("Failed to create MySQL connection:", error);
-      throw new McpError(
-        ErrorCode.InternalError,
-        `Failed to connect to MySQL: ${(error as Error).message}`
-      );
+      throw new McpError(ErrorCode.InternalError, CONNECTION_FAILED_MESSAGE);
     }
   }
 
@@ -182,13 +198,9 @@ class MySQLServer {
             connection = await mysql.createConnection(config);
             await connection.end();
           } catch (error) {
+            console.error("Failed to connect:", error);
             return {
-              content: [
-                {
-                  type: "text",
-                  text: `Failed to connect: ${(error as Error).message}`,
-                },
-              ],
+              content: [{ type: "text", text: CONNECTION_FAILED_MESSAGE }],
               isError: true,
             };
           }
@@ -222,17 +234,7 @@ class MySQLServer {
           const { sql, connectionString } = request.params
             .arguments as QueryToolArguments;
 
-          if (!this.isReadOnlyQuery(sql)) {
-            return {
-              content: [
-                {
-                  type: "text",
-                  text: "Error: Only SELECT queries are allowed for security reasons.",
-                },
-              ],
-              isError: true,
-            };
-          }
+          assertReadOnlyQuery(sql);
 
           const configOverride = connectionString
             ? parseConnectionString(connectionString)
@@ -241,6 +243,8 @@ class MySQLServer {
           let connection: Connection | undefined;
           try {
             connection = await this.createConnection(configOverride);
+            // Second layer: the server itself refuses writes, including those inside stored functions.
+            await connection.query("SET SESSION TRANSACTION READ ONLY");
             const [rows] = await connection.execute(sql);
 
             return {
@@ -275,34 +279,6 @@ class MySQLServer {
           );
       }
     });
-  }
-
-  private isReadOnlyQuery(sql: string): boolean {
-    const normalizedSql = sql.trim().toLowerCase();
-    const writeOperations = [
-      "insert",
-      "update",
-      "delete",
-      "drop",
-      "alter",
-      "create",
-      "set",
-      "grant",
-      "revoke",
-      "rename",
-      "replace",
-      "lock",
-      "unlock",
-      "call",
-      "exec",
-      "execute",
-      "start",
-      "begin",
-      "commit",
-      "rollback",
-    ] as const;
-
-    return !writeOperations.some((op) => normalizedSql.startsWith(op));
   }
 
   async run(): Promise<void> {

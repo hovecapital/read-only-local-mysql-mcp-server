@@ -9,7 +9,7 @@ A Model Context Protocol (MCP) server that enables Claude Desktop to interact wi
 
 - Execute read-only SQL queries through Claude Desktop
 - **Dynamic connection configuration** — connect to any MySQL database at runtime via connection string
-- Built-in security with query validation (only SELECT statements allowed)
+- Built-in security with query validation (SELECT, WITH, SHOW, DESCRIBE and EXPLAIN only, one statement, no comments) plus a server-side read-only transaction
 - Easy integration with Claude Desktop
 - JSON formatted query results
 - Environment-based configuration for database credentials
@@ -266,6 +266,7 @@ If you're using [mise](https://mise.jdx.dev/) for Node.js version management, ma
 | `DB_DATABASE` | Database name | `database` |
 | `DB_USERNAME` | MySQL username | `root` |
 | `DB_PASSWORD` | MySQL password | (empty) |
+| `DB_ALLOWED_HOSTS` | Comma-separated extra hosts a connection string may point at. `DB_HOST` and loopback are always allowed. | (empty) |
 
 ## Usage
 
@@ -325,6 +326,8 @@ The server supports switching databases at runtime without restarting. Connectio
 mysql://username:password@hostname:port/database_name
 ```
 
+The hostname must be `DB_HOST`, a loopback address, or listed in `DB_ALLOWED_HOSTS`. Any other host is rejected before a connection is attempted, so the tools cannot be used to probe the network. Connection failures return a generic message and the real error is written to stderr.
+
 **Example workflow:**
 
 ```
@@ -340,14 +343,12 @@ mysql://username:password@hostname:port/database_name
 
 ### Read-Only Operations
 
-The server only allows SELECT queries. The following operations are blocked:
+Queries are checked in two layers:
 
-- `INSERT` - Adding new records
-- `UPDATE` - Modifying existing records  
-- `DELETE` - Removing records
-- `DROP` - Removing tables/databases
-- `ALTER` - Modifying table structure
-- `CREATE` - Creating new tables/databases
+1. **Query validation** — the statement must start with `SELECT`, `WITH`, `SHOW`, `DESCRIBE` or `EXPLAIN`, contain a single statement, contain no comments, and must not contain state-changing keywords anywhere (for example `UPDATE`, `DELETE`, `INTO OUTFILE`, `INTO DUMPFILE`, `LOAD_FILE`, `FOR UPDATE`, `EXPLAIN ANALYZE`). String literals and backtick identifiers are ignored by this check.
+2. **Server-side read-only transaction** — every query runs after `SET SESSION TRANSACTION READ ONLY`, so MySQL itself rejects writes, including writes made inside stored functions.
+
+Use a MySQL user with only `SELECT` privileges as well (see below). The validation blocks the known bypasses, but the database privilege is the final guarantee.
 
 ### Recommended Database Setup
 
